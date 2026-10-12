@@ -1,0 +1,51 @@
+#include <stdio.h>
+
+int a[20], chosen[20];
+int solutions[100000][21];
+int n, target, count = 0;
+
+void subset(int i, int sum, int k) {
+    int j;
+
+    if (sum == target) {
+        for (j = 0; j < k; j++)
+            solutions[count][j] = chosen[j];
+
+        solutions[count][k] = -1;
+        count++;
+        return;
+    }
+
+    if (i == n || sum > target)
+        return;
+
+    chosen[k] = a[i];
+    subset(i + 1, sum + a[i], k + 1);
+    subset(i + 1, sum, k);
+}
+
+int main() {
+    int i, j;
+
+    scanf("%d", &n);
+
+    for (i = 0; i < n; i++)
+        scanf("%d", &a[i]);
+
+    scanf("%d", &target);
+
+    subset(0, 0, 0);
+
+    if (count == 0) {
+        printf("-1");
+    } else {
+        for (i = count - 1; i >= 0; i--) {
+            for (j = 0; solutions[i][j] != -1; j++)
+                printf("%d ", solutions[i][j]);
+
+            printf("\n");
+        }
+    }
+
+    return 0;
+}
